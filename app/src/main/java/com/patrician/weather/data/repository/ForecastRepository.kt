@@ -1,0 +1,46 @@
+package com.patrician.weather.data.repository
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.patrician.weather.data.local.dao.ForecastDao
+import com.patrician.weather.data.local.entity.ForecastEntity
+import com.patrician.weather.data.remote.RetrofitProvider
+import com.patrician.weather.util.TimeUtil
+
+/**
+ * Repository:
+ * - キャッシュ優先
+ * - 同日 JST の場合はキャッシュを返す
+ * - それ以外は API を呼び出し、DB に保存して返す
+ */
+class ForecastRepository(
+    private val dao: ForecastDao
+) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getForecastByCity(city: String): List<ForecastEntity> {
+        val key = "city:$city"
+        val date = TimeUtil.todayJst()
+
+        val cached = dao.getForecast(key, date)
+        if (cached.isNotEmpty()) return cached
+
+        return try {
+            val response = RetrofitProvider.api.getFiveDayForecastByCity(city)
+            val entities = response.list.map {
+                ForecastEntity(
+                    locationKey = key,
+                    dateJst = date,
+                    dt = it.dt,
+                    temp = it.main.temp,
+                    icon = it.weather.firstOrNull()?.icon ?: ""
+                )
+            }
+            dao.clearForecast(key)
+            dao.insertForecast(entities)
+            entities
+        } catch (e: Exception){
+            // ネットワーク失敗時はキャッシュを返す
+            cached
+        }
+    }
+}
