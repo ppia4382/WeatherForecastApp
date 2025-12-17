@@ -87,6 +87,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     // Networking
     implementation(libs.retrofit)
@@ -94,6 +95,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.moshi.kotlin)
+    kapt(libs.moshi.kotlin.codegen)
 
     // Room
     implementation(libs.room.runtime)

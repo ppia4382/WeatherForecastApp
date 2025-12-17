@@ -3,6 +3,7 @@ package com.patrician.weather.ui.home
 import com.patrician.weather.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,25 +24,30 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     onCitySelected: (String) -> Unit
 ) {
-    val cities = listOf("東京", "兵庫", "大分", "北海道")
+    val cities =  mapOf(
+        "Tokyo" to "東京",
+        "Hyogo" to "兵庫",
+        "Oita" to "大分",
+        "Hokkaido" to "北海道"
+    ) //listOf("東京", "兵庫", "大分", "北海道")
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.home_title))}) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.home_title))}) },
     ) { padding ->
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
+                .padding(padding),
+            contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ){
-            items(cities) { city ->
+            items(cities.toList()) { (englishName, japaneseName) ->
                 Text(
-                    text = city,
+                    text = japaneseName,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable{ onCitySelected(city)}
+                        .clickable { onCitySelected(englishName) }
                         .padding(12.dp)
                 )
             }
