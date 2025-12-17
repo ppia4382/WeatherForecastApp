@@ -6,4 +6,8 @@
     <string name="use_current_location">現在地を使用</string>
     <string name="selected_city">選択された都市: %1$s</string>
     <string name="forecast_stub">ここに天気予報を表示します</string>
+    <string name="network_disconnected">通信に失敗しました</string>
+    <string name="retry">リトライ</string>
+    <string name="temperature">%1$s℃</string>
+
 </resources>

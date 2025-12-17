@@ -1,6 +1,7 @@
 package com.patrician.weather.data.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.patrician.weather.data.local.dao.ForecastDao
 import com.patrician.weather.data.local.entity.ForecastEntity
@@ -25,6 +26,7 @@ class ForecastRepository(
         if (cached.isNotEmpty()) return cached
 
         return try {
+            Log.d("ForecastRepository", "Cache empty. Fetching from network for city: $city")
             val response = RetrofitProvider.api.getFiveDayForecastByCity(city)
             val entities = response.list.map {
                 ForecastEntity(
@@ -39,6 +41,7 @@ class ForecastRepository(
             dao.insertForecast(entities)
             entities
         } catch (e: Exception){
+            Log.e("ForecastRepository", "Network call failed for city: $city", e)
             // ネットワーク失敗時はキャッシュを返す
             cached
         }
