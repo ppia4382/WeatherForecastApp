@@ -60,18 +60,11 @@ versionName = "1.0.0"
 
 ## 動作デモ (App Demo)
 <p align="center">
-  <video src="screenshots/demo_gps_and_cache.mp4" width="300" controls>
-    Your browser does not support the video tag.
-  </video>
-</p>
-
-## 動作デモ (App Demo)
-<p align="center">
-  <video src="https://github.com/ppia4382/WeatherForecastApp/blob/main/screenshots/demo_gps_and_cache.mp4?raw=true" width="300" controls>
-    <a href="https://github.com/ppia4382/WeatherForecastApp/blob/main/screenshots/demo_gps_and_cache.mp4?raw=true">
-      View Demo Video
-    </a>
-  </video>
+  <a href="https://youtube.com/shorts/gDSxsIg6Js4">
+    <img src="https://img.youtube.com/vi/gDSxsIg6Js4/0.jpg" alt="Watch the demo" width="300" />
+    <br>
+    <b>Click to watch the Demo on YouTube</b>
+  </a>
 </p>
 
 
