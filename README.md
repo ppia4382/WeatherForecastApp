@@ -65,6 +65,16 @@ versionName = "1.0.0"
   </video>
 </p>
 
+## 動作デモ (App Demo)
+<p align="center">
+  <video src="https://github.com/ppia4382/WeatherForecastApp/blob/main/screenshots/demo_gps_and_cache.mp4?raw=true" width="300" controls>
+    <a href="https://github.com/ppia4382/WeatherForecastApp/blob/main/screenshots/demo_gps_and_cache.mp4?raw=true">
+      View Demo Video
+    </a>
+  </video>
+</p>
+
+
 ## License / ライセンス
 Copyright (c) 2024 Patrician Andres.
 This project is for technical evaluation purposes.
