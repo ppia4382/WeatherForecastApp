@@ -1,13 +1,17 @@
 <resources>
     <string name="app_name">WeatherForecastApp</string>
-    <string name="home_title">ホーム画面</string>
+    <string name="home_title">天気予報アプリ</string>
     <string name="forecast_title">天気画面</string>
-    <string name="select_city">都市を選択してください</string>
-    <string name="use_current_location">現在地を使用</string>
     <string name="selected_city">選択された都市: %1$s</string>
-    <string name="forecast_stub">ここに天気予報を表示します</string>
     <string name="network_disconnected">通信に失敗しました</string>
     <string name="retry">リトライ</string>
     <string name="temperature">%1$s℃</string>
-
+    <string name="input_select_city_label">都市を選択または入力</string>
+    <string name="input_or_coordinates">または、座標を使用</string>
+    <string name="input_latitude_label">緯度</string>
+    <string name="input_longitude_label">経度</string>
+    <string name="input_get_forecast_button">天気予報を取得</string>
+    <string name="input_searchable_cities_title">検索可能な都市（コピー・ペースト可）</string>
+    <string name="input_label_lat">緯度: </string>
+    <string name="input_label_lon">経度: </string>
 </resources>

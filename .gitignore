@@ -11,12 +11,6 @@ local.properties
 # Android Studio/IntelliJ
 *.iml
 .idea/
-.idea/caches
-.idea/libraries
-.idea/modules.xml
-.idea/workspace.xml
-.idea/navEditor.xml
-.idea/assetWizardSettings.xml
 
 # Captures
 captures/
@@ -40,4 +34,11 @@ google-services.json
 
 # OS files
 .DS_Store
+
+# Byte-code and temporary files
+*.class
+*.pyc
+
+# Kotlin Multiplatform / Compose related (if applicable)
+.kotlin/
 
