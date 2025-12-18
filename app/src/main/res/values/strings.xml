@@ -14,4 +14,9 @@
     <string name="input_searchable_cities_title">検索可能な都市（コピー・ペースト可）</string>
     <string name="input_label_lat">緯度: </string>
     <string name="input_label_lon">経度: </string>
+    <string name="input_gps_button">現在地を取得 (GPS)</string>
+    <string name="error_location_not_found">現在地を取得できませんでした。GPS設定を確認してください。</string>
+    <string name="error_location_failed">位置情報の取得に失敗しました</string>
+    <string name="error_location_permission_denied">位置情報の権限が必要です</string>
+
 </resources>

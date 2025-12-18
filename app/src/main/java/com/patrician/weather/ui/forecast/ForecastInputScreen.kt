@@ -1,11 +1,17 @@
 package com.patrician.weather.ui.forecast
 
+import android.Manifest
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -13,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,6 +27,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.patrician.weather.R
+import com.patrician.weather.util.LocationHelper
+import kotlinx.coroutines.launch
 
 private data class CityInfo(val lat: Double, val lon: Double)
 
@@ -28,8 +37,10 @@ private data class CityInfo(val lat: Double, val lon: Double)
 fun ForecastInputScreen(
     onNavigateToForecast: (city: String?, lat: Double?, lon: Double?) -> Unit
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val locationHelper = remember { LocationHelper(context) }
     val brandColor = Color(0xFF13B0A3)
-
     var cityInput by remember { mutableStateOf("") }
     var latInput by remember { mutableStateOf("") }
     var lonInput by remember { mutableStateOf("") }
@@ -63,6 +74,27 @@ fun ForecastInputScreen(
             else -> {
                 errorMessage = "入力エラー"
             }
+        }
+    }
+
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val isGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+
+        if (isGranted) {
+            scope.launch {
+                val location = locationHelper.getCurrentLocation()
+                if (location != null) {
+                    Log.d("ForecastInput", "Location: ${location.latitude}, ${location.longitude}")
+                    onNavigateToForecast(null, location.latitude, location.longitude)
+                } else {
+                    errorMessage = context.getString(R.string.error_location_not_found)
+                }
+            }
+        } else {
+            errorMessage = context.getString(R.string.error_location_permission_denied)
         }
     }
 
@@ -130,11 +162,26 @@ fun ForecastInputScreen(
             }
 
             Button(
-                onClick = handleGetForecast,
+                onClick = { handleGetForecast() },
                 modifier = Modifier.fillMaxWidth(0.7f),
                 colors = ButtonDefaults.buttonColors(containerColor = brandColor)
             ) {
                 Text(stringResource(R.string.input_get_forecast_button))
+            }
+            OutlinedButton(
+                onClick = {
+                    locationPermissionLauncher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.LocationOn, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.input_gps_button))
             }
         }
 
@@ -151,7 +198,9 @@ fun ForecastInputScreen(
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(cities.entries.toList()) { entry ->
                     Surface(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
                         shape = MaterialTheme.shapes.medium,
                         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                     ) {
