@@ -1,0 +1,4 @@
+properties
+# https://openweathermap.org/api
+# 上記URLからAPIキーの取得ができます。
+OPEN_WEATHER_API_KEY="APIキーをこちらに入れ替えてください。"
