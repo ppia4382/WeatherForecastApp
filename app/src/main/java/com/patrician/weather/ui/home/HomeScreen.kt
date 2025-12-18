@@ -29,7 +29,7 @@ fun HomeScreen(
         "Hyogo" to "兵庫",
         "Oita" to "大分",
         "Hokkaido" to "北海道"
-    ) //listOf("東京", "兵庫", "大分", "北海道")
+    )
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.home_title))}) },

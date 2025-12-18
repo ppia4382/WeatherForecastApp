@@ -18,7 +18,7 @@ class ForecastRepository(
     private val dao: ForecastDao
 ) {
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getForecastByCity(city: String): List<ForecastEntity> {
+    suspend fun getForecastByCity(city: String?): List<ForecastEntity> {
         val key = "city:$city"
         val date = TimeUtil.todayJst()
 
@@ -43,6 +43,38 @@ class ForecastRepository(
         } catch (e: Exception){
             Log.e("ForecastRepository", "Network call failed for city: $city", e)
             // ネットワーク失敗時はキャッシュを返す
+            cached
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getForecastByCoordinates(lat: Double, lon: Double): List<ForecastEntity>{
+        val key = "coords:$lat,$lon"
+        val today = TimeUtil.todayJst()
+
+        val cached = dao.getForecast(key, today)
+        if (cached.isNotEmpty()) return cached
+
+        return try {
+            Log.d("ForecastRepository", "Cache empty. Fetching from network for coords:$lat,$lon")
+            val response = RetrofitProvider.api.getFiveDayForecastByCoordinates(
+                latitude = lat,
+                longitude = lon
+            )
+            val entities = response.list.map {
+                ForecastEntity(
+                    locationKey = key,
+                    dateJst = today,
+                    dt = it.dt,
+                    temp = it.main.temp,
+                    icon = it.weather.firstOrNull()?.icon ?: ""
+                )
+            }
+            dao.clearForecast(key)
+            dao.insertForecast(entities)
+            entities
+        } catch (e: Exception) {
+            Log.e("ForecastRepository", "Network call failed for coords:$lat,$lon", e)
             cached
         }
     }

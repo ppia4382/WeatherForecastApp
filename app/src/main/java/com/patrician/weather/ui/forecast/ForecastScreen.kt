@@ -53,10 +53,21 @@ object ApiConstants {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForecastScreen (
-    city: String,
-    viewModel: ForecastViewModel
+    city: String?,
+    viewModel: ForecastViewModel,
+    onNavigateUp: () -> Unit,
+    lat: Double? = null,
+    lon: Double? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(city, lat, lon) {
+        if (lat != null && lon != null) {
+            viewModel.loadForecastByCoordinates(lat, lon)
+        } else if (!city.isNullOrBlank()) {
+            viewModel.loadForecast(city)
+        }
+    }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.forecast_title)) }) },
@@ -68,13 +79,14 @@ fun ForecastScreen (
                 .padding(padding)
                 .padding(16.dp),
         ) {
+            val headerText = if (city.isNullOrBlank() && lat != null && lon != null) {
+                "緯度: $lat, 経度: $lon"
+            } else {
+                stringResource(R.string.selected_city, city ?: "")
+            }
             Text(
-                text = stringResource(R.string.selected_city, city),
+                text = headerText,
                 style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = stringResource(R.string.forecast_stub),
-                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -86,7 +98,6 @@ fun ForecastScreen (
                     is ForecastUiState.Loading -> {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
-
                     is ForecastUiState.Success -> {
                         val forecasts = (uiState as ForecastUiState.Success).forecasts
                         LazyColumn(
@@ -114,10 +125,6 @@ fun ForecastScreen (
                     }
                 }
             }
-        }
-        //初回ロード
-        LaunchedEffect(Unit) {
-            viewModel.loadForecast(city)
         }
     }
 }
