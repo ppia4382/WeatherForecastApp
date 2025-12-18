@@ -28,7 +28,7 @@ fun AppNavHost(
             ForecastInputScreen(
                 onNavigateToForecast = { city, lat, lon ->
                     val route = when {
-                        city != null -> Routes.Forecast.createRoute(city)
+                        city != null && city.isNotBlank() -> Routes.Forecast.createRoute(city)
                         lat != null && lon != null -> Routes.Forecast.createRoute(lat, lon)
                         else -> null
                     }
