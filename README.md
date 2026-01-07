@@ -7,8 +7,7 @@
 3.  以下の行を追加してください（`""` で囲ってください）:
     OPEN_WEATHER_API_KEY="APIキーをこちらに入れ替えてください。"
 4.  Android Studio でプロジェクトを同期 (Sync Project with Gradle Files) し、実行します。
-*※ セキュリティのため、API キーは Git に含まれていません。`local.properties.example` を参考にしてください。*
-
+※ セキュリティのため、API キーは Git に含まれていません。`local.properties.example` を参考にしてください。*
 
 ## 技術概要
 WeatherForecastApp は、Android 向けに Kotlin と Jetpack Compose を用いて開発した 5 日間の天気予報アプリです。
@@ -46,12 +45,10 @@ versionName = "1.0.0"
 - **ランタイム権限ハンドリング**: `rememberLauncherForActivityResult` を使用した最新の Compose 権限リクエスト手法を採用。
 - **セキュリティ**: API キーを `local.properties` で管理し、`BuildConfig` 経由で安全に参照。
 
-
 ## 機能
 - **ホーム画面**: 都市選択、手動座標入力、および「現在地を取得」ボタン。
 - **予報画面**: 3時間ごとの天気（アイコン、気温、時刻）をリスト表示。
 - **オフライン対応**: 最後に成功したリクエストの結果をキャッシュから復元。
-
 
 ## 制限事項
 - 予報の粒度は 3 時間単位（OpenWeatherMap API の仕様）。
@@ -67,6 +64,41 @@ versionName = "1.0.0"
   </a>
 </p>
 
+# 🧩 Testability / Scalability / Extensibility
+
+本アプリは、モダン Android 開発のベストプラクティスに基づき、**テスト容易性・拡張性・スケーラビリティ**を重視した設計を採用しています。
+
+### **Testability（テストしやすさ）**
+- ViewModel と Repository の責務分離
+- UI（Compose）とロジックの疎結合
+- Retrofit + Repository による明確なデータ取得レイヤー
+- Room 永続化が ViewModel に直接露出しない構造
+
+### **Scalability（拡張性）**
+- 都市名検索と緯度経度検索の両方に対応
+- API 通信、キャッシュ、UI のレイヤー化
+- Navigation Compose による明確な画面遷移
+- 新機能追加時の影響範囲が小さい構造
+
+### **Extensibility（機能追加のしやすさ）**
+- Repository パターンによりデータソース追加が容易
+- 日付単位で整理されたキャッシュ戦略
+- API キー付与を Interceptor に集約
+- 状態駆動 UI によりコンポーネント追加が容易
+
+# 🎨 Material Design / UI 設計
+
+Jetpack Compose を用いることで、**Material Design の原則に沿った UI/UX** を自然に実現しています。
+
+### **Material Design に沿ったポイント**
+- Compose 標準コンポーネント（Scaffold, TopAppBar, Button, TextField など）を使用
+- 適切な余白・タイポグラフィ・レイアウト構成
+- エラー時のリトライ導線など、ユーザー行動を明確に誘導する UI
+
+### **UX 原則との整合性**
+- シンプルで直感的な画面構成
+- ユーザーが迷わない情報設計
+- 状態変化が UI に即時反映される設計
 
 ## License / ライセンス
 Copyright (c) 2024 Patrician Andres.
