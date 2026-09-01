@@ -106,4 +106,4 @@ This project is for technical evaluation purposes.
 本プロジェクトは技術評価目的で作成されたものです。
 
 ## Developer / 開発者
-- **Name:** Patrician Andres
+- **Name:** Shaw Kimura 木村聖
